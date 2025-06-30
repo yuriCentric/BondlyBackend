@@ -7,11 +7,30 @@ router.get("/", async (req, res) => {
   res.json(items);
 });
 
+router.get("/:id", async (req, res) => {
+  const item = await Item.findById(req.params.id);
+  if (!item) return res.status(404).json({ error: "Item not found" });
+  res.json(item);
+});
+
 router.post("/", async (req, res) => {
   try {
     const item = new Item(req.body);
     await item.save();
     res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  try {
+    const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!item) return res.status(404).json({ error: "Item not found" });
+    res.json(item);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
