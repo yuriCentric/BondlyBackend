@@ -34,11 +34,23 @@ const simplePostSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// New SkillSwapMentorship Schema
+const skillSwapMentorshipSchema = new mongoose.Schema(
+  {
+    skillName: { type: String, required: true },
+    skillType: { type: [String], required: true }, // array of strings for multi-select
+    intent: { type: String, enum: ["Offer mentorship", "Learn this skill", "Both"], required: true },
+    proficiencyLevel: { type: String, enum: ["Beginner", "Intermediate", "Advanced"], required: true },
+    description: String,
+  },
+  { timestamps: true }
+);
+
 // Export all models
 module.exports = {
   Item: mongoose.model("Item", itemSchema),
   TravelItem: mongoose.model("TravelItem", travelItemSchema),
   LocalRecommendation: mongoose.model("LocalRecommendation", simplePostSchema),
   EventInterestGroup: mongoose.model("EventInterestGroup", simplePostSchema),
-  SkillSwapMentorship: mongoose.model("SkillSwapMentorship", simplePostSchema),
+  SkillSwapMentorship: mongoose.model("SkillSwapMentorship", skillSwapMentorshipSchema),
 };
