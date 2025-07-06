@@ -17,6 +17,19 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const item = await TravelItem.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!item) return res.status(404).json({ error: "Travel item not found" });
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 router.delete("/:id", async (req, res) => {
   const deleted = await TravelItem.findByIdAndDelete(req.params.id);
   if (!deleted) return res.status(404).json({ error: "Travel item not found" });
