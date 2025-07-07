@@ -7,6 +7,18 @@ router.get("/", async (req, res) => {
   res.json(items);
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const item = await TravelItem.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: "Travel item not found" });
+    }
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching travel item", error });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const item = new TravelItem(req.body);
